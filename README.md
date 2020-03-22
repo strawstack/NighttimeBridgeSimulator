@@ -1,9 +1,19 @@
-# bridge
+# 🌕Bridge Simulator
 
-Move with left and right arrow keys. Click here for a [live demo](https://strawstack.github.com/InteractiveArt/bridge)
+The feeling of running across a bridge at night
 
-# screenshot
-![](./screenshot.png)
+# Controls
 
-# Note
-made with [phaserJS](http://phaser.io/)
+Move with left and right arrow keys. 
+
+# Live Demo
+
+[View Live Demo](#)
+
+# Screenshot
+
+[![](./screenshot.png)](#)
+
+# Tech Credit
+
+[PhaserJS](https://phaser.io/)
