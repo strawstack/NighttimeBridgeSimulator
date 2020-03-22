@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Phaser Template</title>
+	<script src="phaser.js"></script>
+</head>
+<body>
+
+<div id="gameContainer"></div>
+
+<script>
+	var game;
+	var cam_left; var cam_right;
+	var bmd;
+	var tween;
+	window.onload = function() {
+		game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameContainer', {preload: preload, create: create, update: update});
+	};
+
+	function preload(){
+		game.load.image('map','map.png');
+		game.load.image('smoke', 'smoke-puff.png');
+		game.stage.backgroundColor = "#151515";
+		game.world.setBounds(0, 0, 1600, 600);
+	}
+
+	function create(){
+
+		// Locations
+		//
+		var locs = [190, 400, 800, 980, 1250, 1550];
+		var curLoc = 0;
+
+		// Emitter Data
+		//
+		var lifetime = 4000;
+		var numberOfParticles = 10000;
+		var birthRate = 10;
+		var p = {
+			x: locs[curLoc],
+			y: 280
+		};
+
+		// Emitter setup
+		//
+		emitter = game.add.emitter(p.x, p.y, numberOfParticles);
+			emitter.makeParticles('smoke');
+
+			emitter.width = 25;
+			emitter.height = 50;
+
+			emitter.setXSpeed(0, 0);
+			emitter.setYSpeed(0, 0);
+
+			emitter.setRotation(0, 10);
+			emitter.setAlpha(1, 0, lifetime); // fade away
+			emitter.setScale(0.1, 0.4, 0.1, 0.4, lifetime, Phaser.Easing.Quintic.Out);
+			emitter.gravity = -50;
+
+			emitter.start(false, lifetime, birthRate);
+
+
+		// Filler Rects
+		//
+		bmd = game.add.bitmapData(1600, 600);
+			bmd.addToWorld();
+			bmd.ctx.beginPath();
+			bmd.ctx.rect(0, 294, 1017, 320);
+			bmd.ctx.rect(1500, 296, 200, 320);
+			bmd.ctx.fillStyle = "#333333";
+			bmd.ctx.fill();
+
+		// map
+		//
+		game.add.sprite(0, 0, "map");
+
+		// Controlls text
+		//
+		text = game.add.text(400, 450, 'move with <-- and -->');
+
+			//	Center align
+			text.anchor.set(0.5);
+			text.align = 'center';
+
+			//	Font style
+			text.font = 'Arial Black';
+			text.fontSize = 20;
+			text.fontWeight = 'bold';
+
+			//	Stroke color and thickness
+			text.fill = '#555';
+
+		// Tweens (camera movement)
+		//
+		cam_left = game.add.tween(game.camera).to({x: 0}, 1500, Phaser.Easing.Sinusoidal.InOut, false);
+		cam_right = game.add.tween(game.camera).to({x: 800}, 1500, Phaser.Easing.Sinusoidal.InOut, false);
+
+		// use tween to move player on key left-right
+		//
+		var _right = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+		_right.onDown.add(function(){
+
+			// keep player in view
+			//
+			if(curLoc + 1 < locs.length) curLoc += 1;
+
+			// move to next location
+			//
+			tween = game.add.tween(emitter).to({x: locs[curLoc]}, 1500, Phaser.Easing.Sinusoidal.Out, true);
+
+			// pan camera after moving to center
+			//
+			tween.onComplete.add(function(){
+				if(curLoc >= 2) cam_right.start();
+			}, this);
+
+
+		}, this);
+
+		// same as above but for left movement
+		//
+		var _left = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+		_left.onDown.add(function(){
+			if(curLoc - 1 >= 0) curLoc -= 1;
+			tween = game.add.tween(emitter).to({x: locs[curLoc]}, 1500, Phaser.Easing.Sinusoidal.Out, true);
+			tween.onComplete.add(function(){
+				if(curLoc <= 2) cam_left.start();
+			}, this);
+
+		}, this);
+
+
+		// Debug
+		//
+		if(false){
+			game.input.onDown.add(function(){
+				var mx = this.game.input.activePointer.position.x;
+				var my = this.game.input.activePointer.position.y;
+				alert(mx + ", " + my);
+			}, this);
+		}
+
+	}
+
+	function update(){
+
+	}
+</script>
+
+</body>
+</html>
