@@ -8,11 +8,11 @@ Move with left and right arrow keys.
 
 # Live Demo
 
-[View Live Demo](https://regularmemory.blog/NighttimeBridgeSimulator/)
+[View Live Demo](https://strawstack.github.io/NighttimeBridgeSimulator/)
 
 # Screenshot
 
-[![](./screenshot.png)](https://regularmemory.blog/NighttimeBridgeSimulator/)
+[![](./screenshot.png)](https://strawstack.github.io/NighttimeBridgeSimulator/)
 
 # Tech Credit
 
